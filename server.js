@@ -1,9 +1,11 @@
 import express from 'express';
+import cors from 'cors';
 import config from './config.js';
 import { GoogleAdsApi } from 'google-ads-api';
 import asyncHandler from 'express-async-handler';
 
 const app = express();
+app.use(cors());
 
 const clientID = config.CLIENT_ID;
 const clientSecret = config.CLIENT_SECRET;
