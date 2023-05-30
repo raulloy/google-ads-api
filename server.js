@@ -35,6 +35,7 @@ app.get(
         attributes: [
           'campaign.id',
           'campaign.name',
+          'campaign.status',
           'campaign.advertising_channel_type',
           'metrics.cost_micros',
           'metrics.impressions',
@@ -44,11 +45,8 @@ app.get(
           'metrics.conversions',
           'metrics.cost_per_conversion',
         ],
-        constraints: [
-          `segments.date BETWEEN '${since}' AND '${until}'`,
-          'campaign.status = "ENABLED"',
-        ],
-        limit: 50,
+        constraints: [`segments.date BETWEEN '${since}' AND '${until}'`],
+        limit: 400,
       });
 
       res.send(campaigns);
