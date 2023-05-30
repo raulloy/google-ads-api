@@ -35,14 +35,14 @@ app.get(
         attributes: [
           'campaign.id',
           'campaign.name',
-          'campaign.status',
           'campaign.advertising_channel_type',
           'metrics.cost_micros',
           'metrics.impressions',
           'metrics.clicks',
           'metrics.ctr',
           'metrics.average_cpc',
-          'metrics.all_conversions',
+          'metrics.conversions',
+          'metrics.cost_per_conversion',
         ],
         constraints: [
           `segments.date BETWEEN '${since}' AND '${until}'`,
@@ -52,6 +52,44 @@ app.get(
       });
 
       res.send(campaigns);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  })
+);
+
+app.get(
+  '/api/google-ad_groups',
+  asyncHandler(async (req, res) => {
+    const { since, until } = req.query;
+
+    try {
+      const adsets = await customer.report({
+        entity: 'ad_group',
+        attributes: [
+          'ad_group.id',
+          'ad_group.name',
+          'ad_group.campaign',
+          'ad_group.type',
+        ],
+        metrics: [
+          'metrics.cost_micros',
+          'metrics.impressions',
+          'metrics.clicks',
+          'metrics.ctr',
+          'metrics.average_cpc',
+          'metrics.conversions',
+          'metrics.cost_per_conversion',
+        ],
+        constraints: [
+          `segments.date BETWEEN '${since}' AND '${until}'`,
+          'ad_group.status = "ENABLED"',
+          'metrics.cost_micros > 0',
+        ],
+        limit: 100,
+      });
+
+      res.send(adsets);
     } catch (error) {
       res.status(500).send(error);
     }
