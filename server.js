@@ -45,8 +45,11 @@ app.get(
           'metrics.conversions',
           'metrics.cost_per_conversion',
         ],
-        constraints: [`segments.date BETWEEN '${since}' AND '${until}'`],
-        limit: 400,
+        constraints: [
+          `segments.date BETWEEN '${since}' AND '${until}'`,
+          'metrics.cost_micros > 0',
+        ],
+        limit: 200,
       });
 
       res.send(campaigns);
@@ -83,7 +86,7 @@ app.get(
           `segments.date BETWEEN '${since}' AND '${until}'`,
           'metrics.cost_micros > 0',
         ],
-        limit: 500,
+        limit: 200,
       });
 
       res.send(adsets);
