@@ -94,6 +94,49 @@ app.get(
   })
 );
 
+app.get(
+  '/api/google-ads',
+  asyncHandler(async (req, res) => {
+    const { since, until } = req.query;
+
+    try {
+      const ads = await customer.report({
+        entity: 'ad_group_ad',
+        attributes: [
+          'ad_group_ad.ad.id',
+          'ad_group_ad.ad.name',
+          'ad_group_ad.ad.discovery_multi_asset_ad.headlines',
+          'ad_group_ad.ad.responsive_search_ad.headlines',
+          'ad_group_ad.ad_group',
+          'ad_group_ad.ad.type',
+        ],
+        metrics: [
+          'metrics.cost_micros',
+          'metrics.impressions',
+          'metrics.clicks',
+          'metrics.ctr',
+          'metrics.average_cpc',
+          'metrics.conversions',
+          'metrics.cost_per_conversion',
+        ],
+        constraints: [
+          `segments.date BETWEEN '${since}' AND '${until}'`,
+          'ad_group_ad.status = "ENABLED"',
+          'metrics.cost_micros > 0',
+          // 'ad_group_ad.ad.name != "null"',
+          // 'campaign.advertising_channel_type = "DISPLAY"',
+        ],
+        limit: 200,
+      });
+
+      console.log(ads.length);
+      res.send(ads);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  })
+);
+
 app.listen(config.PORT, () => {
   console.log(`Server is listening on port ${config.PORT}`);
 });
