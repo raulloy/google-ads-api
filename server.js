@@ -79,7 +79,10 @@ app.get(
           'metrics.conversions',
           'metrics.cost_per_conversion',
         ],
-        constraints: [`segments.date BETWEEN '${since}' AND '${until}'`],
+        constraints: [
+          `segments.date BETWEEN '${since}' AND '${until}'`,
+          'metrics.cost_micros > 0',
+        ],
         limit: 500,
       });
 
