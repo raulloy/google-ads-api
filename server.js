@@ -79,12 +79,8 @@ app.get(
           'metrics.conversions',
           'metrics.cost_per_conversion',
         ],
-        constraints: [
-          `segments.date BETWEEN '${since}' AND '${until}'`,
-          'ad_group.status = "ENABLED"',
-          'metrics.cost_micros > 0',
-        ],
-        limit: 100,
+        constraints: [`segments.date BETWEEN '${since}' AND '${until}'`],
+        limit: 500,
       });
 
       res.send(adsets);
@@ -129,7 +125,6 @@ app.get(
         limit: 200,
       });
 
-      console.log(ads.length);
       res.send(ads);
     } catch (error) {
       res.status(500).send(error);
