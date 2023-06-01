@@ -107,8 +107,10 @@ app.get(
         attributes: [
           'ad_group_ad.ad.id',
           'ad_group_ad.ad.name',
+          'ad_group_ad.ad.discovery_carousel_ad.headline',
           'ad_group_ad.ad.discovery_multi_asset_ad.headlines',
           'ad_group_ad.ad.responsive_search_ad.headlines',
+          'ad_group_ad.ad.responsive_display_ad.headlines',
           'ad_group_ad.ad_group',
           'ad_group_ad.ad.type',
         ],
@@ -125,8 +127,6 @@ app.get(
           `segments.date BETWEEN '${since}' AND '${until}'`,
           'ad_group_ad.status = "ENABLED"',
           'metrics.cost_micros > 0',
-          // 'ad_group_ad.ad.name != "null"',
-          // 'campaign.advertising_channel_type = "DISPLAY"',
         ],
         limit: 200,
       });
