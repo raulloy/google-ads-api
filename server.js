@@ -10,7 +10,6 @@ app.use(cors());
 const clientID = config.CLIENT_ID;
 const clientSecret = config.CLIENT_SECRET;
 const devToken = config.DEVELOPER_TOKEN;
-const customerID = config.CUSTOMER_ID;
 const refreshToken = config.REFRESH_TOKEN;
 
 const client = new GoogleAdsApi({
@@ -19,17 +18,18 @@ const client = new GoogleAdsApi({
   developer_token: devToken,
 });
 
-const customer = client.Customer({
-  customer_id: customerID,
-  refresh_token: refreshToken,
-});
-
 app.get(
-  '/api/google-campaigns',
+  '/api/google-campaigns/:customer_id',
   asyncHandler(async (req, res) => {
+    const { customer_id } = req.params;
     const { since, until } = req.query;
 
     try {
+      const customer = client.Customer({
+        customer_id: customer_id,
+        refresh_token: refreshToken,
+      });
+
       const campaigns = await customer.report({
         entity: 'campaign',
         attributes: [
@@ -60,11 +60,17 @@ app.get(
 );
 
 app.get(
-  '/api/google-ad_groups',
+  '/api/google-ad_groups/:customer_id',
   asyncHandler(async (req, res) => {
+    const { customer_id } = req.params;
     const { since, until } = req.query;
 
     try {
+      const customer = client.Customer({
+        customer_id: customer_id,
+        refresh_token: refreshToken,
+      });
+
       const adsets = await customer.report({
         entity: 'ad_group',
         attributes: [
@@ -97,11 +103,17 @@ app.get(
 );
 
 app.get(
-  '/api/google-ads',
+  '/api/google-ads/:customer_id',
   asyncHandler(async (req, res) => {
+    const { customer_id } = req.params;
     const { since, until } = req.query;
 
     try {
+      const customer = client.Customer({
+        customer_id: customer_id,
+        refresh_token: refreshToken,
+      });
+
       const ads = await customer.report({
         entity: 'ad_group_ad',
         attributes: [

@@ -7,6 +7,5 @@ export default {
   CLIENT_ID: process.env.CLIENT_ID,
   CLIENT_SECRET: process.env.CLIENT_SECRET,
   DEVELOPER_TOKEN: process.env.DEVELOPER_TOKEN,
-  CUSTOMER_ID: process.env.CUSTOMER_ID,
   REFRESH_TOKEN: process.env.REFRESH_TOKEN,
 };
